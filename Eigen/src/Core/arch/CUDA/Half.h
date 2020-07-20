@@ -298,12 +298,15 @@ EIGEN_STRONG_INLINE EIGEN_DEVICE_FUNC half& operator /= (half& a, const half& b)
   a = half(float(a) / float(b));
   return a;
 }
+#if 0
+// disabling functions since they create warnings in CUDA 11
 EIGEN_STRONG_INLINE EIGEN_DEVICE_FUNC bool operator == (const half& a, const half& b) {
   return numext::equal_strict(float(a),float(b));
 }
 EIGEN_STRONG_INLINE EIGEN_DEVICE_FUNC bool operator != (const half& a, const half& b) {
   return numext::not_equal_strict(float(a), float(b));
 }
+#endif
 EIGEN_STRONG_INLINE EIGEN_DEVICE_FUNC bool operator < (const half& a, const half& b) {
   return float(a) < float(b);
 }
@@ -448,7 +451,7 @@ EIGEN_STRONG_INLINE EIGEN_DEVICE_FUNC half abs(const half& a) {
   return result;
 }
 EIGEN_STRONG_INLINE EIGEN_DEVICE_FUNC half exp(const half& a) {
-#if EIGEN_CUDACC_VER >= 80000 && defined EIGEN_CUDA_ARCH && EIGEN_CUDA_ARCH >= 530
+#if defined(EIGEN_HAS_CUDA_FP16) && EIGEN_CUDACC_VER >= 80000 && defined EIGEN_CUDA_ARCH && EIGEN_CUDA_ARCH >= 530
   return half(hexp(a));
 #else
    return half(::expf(float(a)));
@@ -468,7 +471,7 @@ EIGEN_STRONG_INLINE EIGEN_DEVICE_FUNC half log10(const half& a) {
   return half(::log10f(float(a)));
 }
 EIGEN_STRONG_INLINE EIGEN_DEVICE_FUNC half sqrt(const half& a) {
-#if EIGEN_CUDACC_VER >= 80000 && defined EIGEN_CUDA_ARCH && EIGEN_CUDA_ARCH >= 530
+#if defined(EIGEN_HAS_CUDA_FP16) && EIGEN_CUDACC_VER >= 80000 && defined EIGEN_CUDA_ARCH && EIGEN_CUDA_ARCH >= 530
   return half(hsqrt(a));
 #else
     return half(::sqrtf(float(a)));
@@ -490,14 +493,14 @@ EIGEN_STRONG_INLINE EIGEN_DEVICE_FUNC half tanh(const half& a) {
   return half(::tanhf(float(a)));
 }
 EIGEN_STRONG_INLINE EIGEN_DEVICE_FUNC half floor(const half& a) {
-#if EIGEN_CUDACC_VER >= 80000 && defined EIGEN_CUDA_ARCH && EIGEN_CUDA_ARCH >= 300
+#if defined(EIGEN_HAS_CUDA_FP16) && EIGEN_CUDACC_VER >= 80000 && defined EIGEN_CUDA_ARCH && EIGEN_CUDA_ARCH >= 300
   return half(hfloor(a));
 #else
   return half(::floorf(float(a)));
 #endif
 }
 EIGEN_STRONG_INLINE EIGEN_DEVICE_FUNC half ceil(const half& a) {
-#if EIGEN_CUDACC_VER >= 80000 && defined EIGEN_CUDA_ARCH && EIGEN_CUDA_ARCH >= 300
+#if defined(EIGEN_HAS_CUDA_FP16) && EIGEN_CUDACC_VER >= 80000 && defined EIGEN_CUDA_ARCH && EIGEN_CUDA_ARCH >= 300
   return half(hceil(a));
 #else
   return half(::ceilf(float(a)));
@@ -592,7 +595,7 @@ EIGEN_STRONG_INLINE EIGEN_DEVICE_FUNC Eigen::half exph(const Eigen::half& a) {
   return Eigen::half(::expf(float(a)));
 }
 EIGEN_STRONG_INLINE EIGEN_DEVICE_FUNC Eigen::half logh(const Eigen::half& a) {
-#if EIGEN_CUDACC_VER >= 80000 && defined(EIGEN_CUDA_ARCH) && EIGEN_CUDA_ARCH >= 530
+#if defined(EIGEN_HAS_CUDA_FP16) && EIGEN_CUDACC_VER >= 80000 && defined(EIGEN_CUDA_ARCH) && EIGEN_CUDA_ARCH >= 530
   return Eigen::half(::hlog(a));
 #else
   return Eigen::half(::logf(float(a)));

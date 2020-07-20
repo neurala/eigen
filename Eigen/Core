@@ -253,6 +253,9 @@
   #endif
 #endif
 
+// disable CUDA FP16 because it clashes with OpenCL types
+#undef EIGEN_HAS_CUDA_FP16
+
 #if defined EIGEN_HAS_CUDA_FP16
   #include <host_defines.h>
   #include <cuda_fp16.h>
