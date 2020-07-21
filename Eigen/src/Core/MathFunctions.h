@@ -1071,7 +1071,7 @@ template<> EIGEN_DEVICE_FUNC EIGEN_ALWAYS_INLINE
 double abs(const double &x) { return ::fabs(x); }
 
 #if 0
-
+// disabling functions since they create warnings in CUDA 11; real() and imag() are not device functions
 template <> EIGEN_DEVICE_FUNC EIGEN_ALWAYS_INLINE
 float abs(const std::complex<float>& x) {
   return ::hypotf(x.real(), x.imag());
